@@ -1,0 +1,18 @@
+{
+  "name": "tugasnotes",
+  "version": "1.0.0",
+  "description": "Aplikasi CRUD untuk menulis, membaca, memperbarui, dan menghapus jurnal eksekusi harian. Backend **Node.js + Express**, database **MySQL via XAMPP**, frontend **Vanilla HTML/CSS/JS** bertema Developer Terminal.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql2": "^3.20.0"
+  }
+}

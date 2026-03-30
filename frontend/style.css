@@ -1,0 +1,535 @@
+/* ════════════════════════════════════════════════════════════════
+   JoyRecords — style.css
+   Theme: Retro Control Panel / Concrete
+   Inspired by: IBM terminals, 1990s intranet apps
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Design Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg:           #E0E0D1;
+  --bg-panel:     #D4D4C4;
+  --bg-input:     #EFEFEA;
+  --bg-card:      #FFFFFF;
+  --bg-header:    #C4C4B4;
+  --bg-btn:       #2E7D32;
+  --bg-btn-hover: #1B5E20;
+  --bg-danger:    #B71C1C;
+
+  --text:         #333333;
+  --text-muted:   #666666;
+  --text-light:   #999999;
+  --text-on-btn:  #FFFFFF;
+
+  --border:       #555555;
+  --border-light: #AAAAAA;
+
+  --cat-pribadi:  #6A1B9A;
+  --cat-kampus:   #1565C0;
+  --cat-koding:   #2E7D32;
+  --cat-penting:  #B71C1C;
+  --cat-umum:     #555555;
+
+  --font-main:    Arial, Verdana, sans-serif;
+  --font-mono:    'Courier New', Courier, monospace;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-panel); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+/* ── Utility ────────────────────────────────────────────────────── */
+[hidden] { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   STATUSBAR
+   ════════════════════════════════════════════════════════════════ */
+.statusbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-header);
+  border-bottom: 2px solid var(--border);
+}
+
+.statusbar-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 8px 20px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+}
+
+/* Terminal prompt (kiri) */
+.term-prompt { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); }
+.term-sep    { font-family: var(--font-mono); color: var(--text-muted); }
+.term-path   { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+.term-cursor { font-family: var(--font-mono); color: var(--text); margin-left: 2px; font-weight: bold; }
+
+/* Title (tengah) */
+.statusbar-center { display: flex; align-items: center; gap: 8px; }
+.sys-label {
+  font-family: var(--font-mono);
+  font-size: 13px; font-weight: bold;
+  letter-spacing: 2px; color: var(--text);
+  text-transform: uppercase;
+}
+.sys-version {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  padding: 1px 5px;
+}
+
+/* Kanan */
+.statusbar-right { display: flex; align-items: center; gap: 12px; }
+.indicator {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: bold;
+  letter-spacing: 1px; padding: 2px 6px;
+  border: 2px solid var(--bg-btn);
+  color: var(--bg-btn); background: transparent;
+}
+.record-counter {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: bold; color: var(--text);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   WORKSPACE LAYOUT
+   ════════════════════════════════════════════════════════════════ */
+.workspace {
+  max-width: 1200px; margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .workspace { grid-template-columns: 1fr; gap: 16px; }
+  .terminal-panel { position: static; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TERMINAL PANEL (kiri — form input)
+   ════════════════════════════════════════════════════════════════ */
+.terminal-panel {
+  position: sticky; top: 50px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+}
+
+/* Window titlebar — retro panel header */
+.win-titlebar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px;
+  background: var(--bg-header);
+  border-bottom: 2px solid var(--border);
+}
+
+/* Titik-titik jadi kotak kecil bergaya retro */
+.win-dot {
+  width: 10px; height: 10px;
+  border: 1px solid var(--border); flex-shrink: 0;
+}
+.dot-red    { background: #B71C1C; }
+.dot-yellow { background: #F9A825; }
+.dot-green  { background: #2E7D32; }
+
+.win-title {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: bold;
+  color: var(--text); margin-left: 4px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.win-body { padding: 16px; }
+
+/* ════════════════════════════════════════════════════════════════
+   FORM FIELDS
+   ════════════════════════════════════════════════════════════════ */
+.field-group { margin-bottom: 14px; }
+
+.field-label {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: bold;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 5px;
+}
+.label-prompt { color: var(--bg-btn); font-weight: bold; font-size: 13px; }
+
+.term-input,
+.term-textarea,
+.term-select {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  padding: 7px 9px;
+  outline: none;
+  resize: vertical;
+}
+.term-input::placeholder,
+.term-textarea::placeholder { color: var(--text-light); }
+.term-input:focus,
+.term-textarea:focus,
+.term-select:focus {
+  border-color: var(--bg-btn);
+  background: #FFFFFF;
+  outline: none;
+}
+
+.term-input.is-error { border-color: var(--bg-danger); }
+.field-error {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--bg-danger);
+  margin-top: 3px; font-weight: bold;
+}
+.field-error::before { content: '[ERR] '; }
+
+/* Select */
+.term-select {
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+.term-select option { font-family: var(--font-mono); background: #fff; color: var(--text); }
+
+/* ════════════════════════════════════════════════════════════════
+   BUTTONS
+   ════════════════════════════════════════════════════════════════ */
+.form-actions {
+  display: flex; gap: 8px; align-items: center;
+  margin-top: 16px;
+}
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: bold;
+  letter-spacing: 1px; text-transform: uppercase;
+  border: 2px solid var(--border);
+  border-radius: 0;
+  padding: 8px 14px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.btn:active  { opacity: 0.85; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-prefix { font-size: 15px; line-height: 1; }
+
+/* Tombol utama — hijau IBM */
+.btn-exec {
+  flex: 1; justify-content: center;
+  background: var(--bg-btn);
+  color: var(--text-on-btn);
+  border-color: var(--border);
+}
+.btn-exec:hover:not(:disabled) { background: var(--bg-btn-hover); }
+
+/* Tombol batal */
+.btn-abort {
+  background: var(--bg-panel);
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn-abort:hover:not(:disabled) {
+  background: var(--bg-danger);
+  color: var(--text-on-btn);
+  border-color: var(--bg-danger);
+}
+
+/* Tombol hapus di modal */
+.btn-danger-exec {
+  background: var(--bg-danger);
+  color: var(--text-on-btn);
+  border-color: var(--border);
+}
+.btn-danger-exec:hover:not(:disabled) { background: #7f0000; }
+
+/* ── Sys Output ─────────────────────────────────────────────────── */
+.sys-output {
+  margin-top: 14px;
+  padding: 8px 10px;
+  background: #FFFFFF;
+  border: 2px solid var(--border-light);
+  border-left: 4px solid var(--bg-btn);
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-muted);
+  min-height: 36px;
+}
+.sys-ok    { color: var(--bg-btn);     font-weight: bold; }
+.sys-err   { color: var(--bg-danger);  font-weight: bold; }
+.sys-info  { color: #1565C0;           font-weight: bold; }
+.sys-warn  { color: #E65100;           font-weight: bold; }
+
+/* ════════════════════════════════════════════════════════════════
+   LOG VIEWER (kanan)
+   ════════════════════════════════════════════════════════════════ */
+.log-viewer { min-width: 0; }
+
+/* Search bar */
+.search-terminal {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+  padding: 8px 12px;
+  margin-bottom: 14px;
+}
+.search-prompt {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: bold;
+  color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+}
+.search-field {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: var(--font-mono); font-size: 13px; color: var(--text);
+}
+.search-field::placeholder { color: var(--text-light); font-style: italic; }
+
+/* ── State Panes ─────────────────────────────────────────────────── */
+.state-pane {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 50px 20px; gap: 12px; text-align: center;
+}
+.boot-seq {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 13px; line-height: 2; color: var(--text);
+}
+.blink-line { color: var(--text-muted); }
+.blink { animation: blink-cur 0.9s step-end infinite; }
+@keyframes blink-cur { 50% { opacity: 0; } }
+
+.ascii-art {
+  font-family: var(--font-mono);
+  font-size: 11px; line-height: 1.4;
+  color: var(--text-light); margin-bottom: 10px;
+}
+.state-msg     { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+.state-msg-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-light); }
+
+/* Text colour helpers */
+.text-green  { color: var(--bg-btn);    }
+.text-cyan   { color: #1565C0;          }
+.text-yellow { color: #E65100;          }
+.text-red    { color: var(--bg-danger); }
+
+/* ════════════════════════════════════════════════════════════════
+   LOG GRID
+   ════════════════════════════════════════════════════════════════ */
+.log-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+/* ── LOG CARD ────────────────────────────────────────────────────── */
+.log-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 0;
+  display: flex; flex-direction: column;
+  animation: card-show 0.15s ease both;
+}
+.log-card:hover { border-color: var(--bg-btn); }
+.log-card.removing {
+  opacity: 0; border-width: 0;
+  max-height: 0; overflow: hidden;
+  transition: all 0.2s ease;
+}
+@keyframes card-show {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Category top border strip — no fill, just thick top border */
+.log-card-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--bg-panel);
+  border-bottom: 2px solid var(--border-light);
+  gap: 8px;
+}
+.log-id {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: bold;
+  color: var(--text-muted); letter-spacing: 1px;
+}
+
+/* Badge kategori — teks dengan warna border sesuai kategori */
+.log-kategori-badge {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: bold;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 1px 6px;
+  border: 2px solid;
+  border-radius: 0;
+  background: transparent;
+}
+.badge--pribadi { color: var(--cat-pribadi); border-color: var(--cat-pribadi); }
+.badge--kampus  { color: var(--cat-kampus);  border-color: var(--cat-kampus);  }
+.badge--koding  { color: var(--cat-koding);  border-color: var(--cat-koding);  }
+.badge--penting { color: var(--cat-penting); border-color: var(--cat-penting); }
+.badge--umum    { color: var(--cat-umum);    border-color: var(--cat-umum);    }
+
+/* Warna top border kartu sesuai kategori */
+.log-card[data-kategori="Pribadi"] { border-top: 4px solid var(--cat-pribadi); }
+.log-card[data-kategori="Kampus"]  { border-top: 4px solid var(--cat-kampus);  }
+.log-card[data-kategori="Koding"]  { border-top: 4px solid var(--cat-koding);  }
+.log-card[data-kategori="Penting"] { border-top: 4px solid var(--cat-penting); }
+.log-card[data-kategori="Umum"]    { border-top: 4px solid var(--cat-umum);    }
+
+/* Card body */
+.log-card-body { padding: 12px 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+.log-judul {
+  font-family: var(--font-mono);
+  font-size: 14px; font-weight: bold;
+  color: var(--text); line-height: 1.4; word-break: break-word;
+}
+.log-judul::before { content: '> '; color: var(--bg-btn); }
+
+.log-isi {
+  font-family: var(--font-main);
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.6; word-break: break-word; white-space: pre-wrap;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  border-left: 3px solid var(--border-light);
+  padding-left: 8px; margin-left: 2px;
+}
+
+/* Card footer */
+.log-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-panel);
+}
+.log-timestamp {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--text-light); letter-spacing: 0.3px;
+}
+.log-timestamp::before { content: '@ '; color: var(--text-light); }
+.log-actions { display: flex; gap: 4px; }
+
+/* Action buttons on card */
+.btn-log-action {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: bold;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 4px 9px;
+  border: 2px solid var(--border-light);
+  border-radius: 0;
+  background: var(--bg-panel);
+  cursor: pointer; color: var(--text-muted);
+}
+.btn-log-edit:hover  {
+  background: var(--bg-btn); color: #fff; border-color: var(--bg-btn);
+}
+.btn-log-del:hover {
+  background: var(--bg-danger); color: #fff; border-color: var(--bg-danger);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TOAST — terminal output style
+   ════════════════════════════════════════════════════════════════ */
+.toast-stack {
+  position: fixed; bottom: 16px; right: 16px;
+  z-index: 500; display: flex; flex-direction: column;
+  gap: 6px; pointer-events: none;
+}
+.toast {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: #FFFFFF;
+  border: 2px solid var(--border);
+  border-left: 5px solid;
+  padding: 9px 14px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--text);
+  min-width: 240px; max-width: 360px; pointer-events: auto;
+  animation:
+    toast-in 0.15s ease both,
+    toast-out 0.15s ease 3s forwards;
+}
+.toast.success { border-left-color: var(--bg-btn); }
+.toast.error   { border-left-color: var(--bg-danger); }
+.toast.info    { border-left-color: #1565C0; }
+
+.toast-tag { font-weight: bold; font-size: 10px; flex-shrink: 0; padding-top: 1px; }
+.toast.success .toast-tag { color: var(--bg-btn); }
+.toast.error   .toast-tag { color: var(--bg-danger); }
+.toast.info    .toast-tag { color: #1565C0; }
+
+@keyframes toast-in  { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes toast-out { to   { opacity: 0; } }
+
+/* ════════════════════════════════════════════════════════════════
+   MODAL
+   ════════════════════════════════════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop[hidden] { display: none; }
+
+.modal-terminal {
+  width: 100%; max-width: 400px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+}
+
+.modal-body-inner { padding: 18px; }
+
+.modal-cmd {
+  font-family: var(--font-mono);
+  font-size: 13px; font-weight: bold; color: var(--text);
+  margin-bottom: 8px; word-break: break-all;
+}
+.modal-target { color: var(--bg-danger); }
+.modal-warning {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-muted);
+  margin-bottom: 18px;
+}
+.modal-actions { display: flex; gap: 8px; }
+
+/* ════════════════════════════════════════════════════════════════
+   SCANLINES — hilangkan efek modern
+   ════════════════════════════════════════════════════════════════ */
+.scanlines { display: none; }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .statusbar-center { display: none; }
+  .workspace  { padding: 12px; }
+  .log-grid   { grid-template-columns: 1fr; }
+  .toast-stack { right: 10px; bottom: 10px; }
+}

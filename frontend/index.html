@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JoyRecords — System log manager. Tulis, kelola, dan arsipkan jurnal eksekusi harianmu." />
+  <title>JoyRecords :: /sys/logs</title>
+
+  <!-- System fonts only — Courier New / Arial (retro theme) -->
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Scanlines overlay ───────────────────────────────────────── -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- ── Header / Statusbar ─────────────────────────────────────── -->
+  <header class="statusbar" role="banner">
+    <div class="statusbar-inner">
+      <div class="statusbar-left">
+        <span class="term-prompt">root@joyrecords</span>
+        <span class="term-sep">:</span>
+        <span class="term-path">~/sys/logs</span>
+        <span class="term-cursor" aria-hidden="true">█</span>
+      </div>
+      <div class="statusbar-center">
+        <span class="sys-label">JOY_RECORDS</span>
+        <span class="sys-version">v1.0.0</span>
+      </div>
+      <div class="statusbar-right">
+        <span class="indicator indicator--on" title="Server status">SYS</span>
+        <span class="record-counter" id="note-counter">RECORDS: 0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main Layout ─────────────────────────────────────────────── -->
+  <main class="workspace">
+
+    <!-- ── Input Terminal Panel (kiri) ─────────────────────────── -->
+    <aside class="terminal-panel" aria-label="Input jurnal baru">
+
+      <div class="win-titlebar">
+        <span class="win-dot dot-red"></span>
+        <span class="win-dot dot-yellow"></span>
+        <span class="win-dot dot-green"></span>
+        <span class="win-title" id="form-title">NEW_ENTRY.log</span>
+      </div>
+
+      <div class="win-body">
+        <form id="note-form" novalidate autocomplete="off">
+          <input type="hidden" id="edit-id" value="" />
+
+          <!-- Judul -->
+          <div class="field-group">
+            <label for="input-judul" class="field-label">
+              <span class="label-prompt">$</span> JUDUL
+            </label>
+            <input
+              type="text"
+              id="input-judul"
+              class="term-input"
+              placeholder="entry_title_here"
+              maxlength="255"
+              spellcheck="false"
+              required
+            />
+            <span class="field-error" id="error-judul" role="alert"></span>
+          </div>
+
+          <!-- Isi -->
+          <div class="field-group">
+            <label for="input-isi" class="field-label">
+              <span class="label-prompt">$</span> ISI_LOG
+            </label>
+            <textarea
+              id="input-isi"
+              class="term-textarea"
+              placeholder="// tulis log di sini..."
+              rows="6"
+              spellcheck="false"
+            ></textarea>
+          </div>
+
+          <!-- Kategori -->
+          <div class="field-group">
+            <label for="input-kategori" class="field-label">
+              <span class="label-prompt">$</span> KATEGORI
+            </label>
+            <select id="input-kategori" class="term-select">
+              <option value="Pribadi">[PRIBADI]</option>
+              <option value="Kampus">[KAMPUS]</option>
+              <option value="Koding">[KODING]</option>
+              <option value="Umum">[UMUM]</option>
+              <option value="Penting">[PENTING]</option>
+            </select>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-exec" id="btn-submit">
+              <span class="btn-prefix">›</span>
+              <span id="btn-submit-text">PUSH_ENTRY</span>
+            </button>
+            <button type="button" class="btn btn-abort" id="btn-cancel" hidden>
+              ABORT
+            </button>
+          </div>
+        </form>
+
+        <!-- System output mock -->
+        <div class="sys-output" id="sys-output" aria-live="polite">
+          <span class="sys-ok">[OK]</span> System ready. Awaiting input...
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Log Viewer (kanan) ──────────────────────────────────── -->
+    <section class="log-viewer" aria-label="Daftar jurnal">
+
+      <!-- Search terminal -->
+      <div class="search-terminal">
+        <span class="search-prompt" aria-hidden="true">~/logs $</span>
+        <input
+          type="search"
+          id="search-input"
+          class="search-field"
+          placeholder="grep -i &quot;query&quot;"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <!-- State: loading -->
+      <div class="state-pane" id="state-loading" aria-live="polite">
+        <div class="boot-seq">
+          <p><span class="text-green">[ &nbsp;&nbsp;OK&nbsp;&nbsp; ]</span> Starting JoyRecords daemon...</p>
+          <p><span class="text-cyan">[ &nbsp;INFO&nbsp; ]</span> Connecting to database...</p>
+          <p class="blink-line"><span class="text-yellow">[ &nbsp;WAIT&nbsp; ]</span> Fetching records<span class="blink">_</span></p>
+        </div>
+      </div>
+
+      <!-- State: empty -->
+      <div class="state-pane" id="state-empty" hidden>
+        <pre class="ascii-art">
+  _____ __  __ ____ _______   __
+ | ____|  \/  |  _ \_   _\ \ / /
+ |  _| | |\/| | |_) || |  \ V /
+ | |___| |  | |  __/ | |   | |
+ |_____|_|  |_|_|    |_|   |_|
+        </pre>
+        <p class="state-msg"><span class="text-yellow">[WARN]</span> No records found. Push your first entry.</p>
+      </div>
+
+      <!-- State: not found -->
+      <div class="state-pane" id="state-not-found" hidden>
+        <p class="state-msg">
+          <span class="text-red">[ERR]</span> grep: pattern not found in log database.
+        </p>
+        <p class="state-msg-sub">Try a different search query.</p>
+      </div>
+
+      <!-- Log Grid -->
+      <div class="log-grid" id="notes-grid" role="list" aria-label="Log jurnal"></div>
+
+    </section>
+  </main>
+
+  <!-- ── Toast Terminal ─────────────────────────────────────────── -->
+  <div class="toast-stack" id="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- ── Konfirmasi Hapus Modal ──────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-terminal">
+      <div class="win-titlebar">
+        <span class="win-dot dot-red"></span>
+        <span class="win-dot dot-yellow"></span>
+        <span class="win-dot dot-green"></span>
+        <span class="win-title text-red">CONFIRM_DELETE.sh</span>
+      </div>
+      <div class="win-body modal-body-inner">
+        <p class="modal-cmd"><span class="text-red">$</span> rm -rf <span class="modal-target" id="modal-body">entry</span></p>
+        <p class="modal-warning">// Operasi ini tidak dapat dibatalkan!</p>
+        <div class="modal-actions">
+          <button class="btn btn-abort" id="modal-cancel">^C CANCEL</button>
+          <button class="btn btn-danger-exec" id="modal-confirm">EXECUTE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

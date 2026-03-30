@@ -1,0 +1,16 @@
+# Exclude Markdown (User request)
+*.md
+
+# Node.js
+node_modules/
+package-lock.json (optional but common)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
