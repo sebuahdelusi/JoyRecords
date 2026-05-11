@@ -9,7 +9,6 @@
 // const API_BASE = 'http://localhost:3000/api/v1/jurnal';
 // const API_BASE = 'http://34.50.75.107:3000/api/v1/jurnal';
 
-// Ganti dengan URL Cloud Run backend kamu
 const API_BASE = 'https://joyrecords-backend-123230230-487072029768.asia-southeast2.run.app/api/v1/jurnal';
 
 // ── State ───────────────────────────────────────────────────────
