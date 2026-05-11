@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql   = require('mysql2');
 const cors    = require('cors');
+app.use(cors());
 
 const app  = express();
 const PORT = process.env.PORT || 8080;
@@ -14,13 +15,13 @@ const db = mysql.createConnection({
   host     : '34.172.113.167',
   user     : 'admin',
   password : 'mypassword',
-  database : 'notes_123230230',   // <-- ganti dengan NIM kamu
+  database : 'notes_123230230',
 });
 
 db.connect((err) => {
   if (err) {
     console.error('❌ Gagal konek ke database:', err.message);
-    process.exit(1);
+    return;
   }
   console.log('✅ Terhubung ke database notes_123230230');
 });
