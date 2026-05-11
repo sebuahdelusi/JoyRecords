@@ -1,14 +1,8 @@
 const express = require('express');
 const mysql   = require('mysql2');
 const cors    = require('cors');
-app.use(cors());
 
 const app  = express();
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-});
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors({ origin: '*' }));
@@ -16,18 +10,18 @@ app.use(express.json());
 
 // ── Koneksi Database (server TCC) ───────────────────────────────────────────
 const db = mysql.createConnection({
-  host     : '34.172.113.167',
-  user     : 'admin',
-  password : 'mypassword',
-  database : 'notes_123230230',
+  host     : 'TERSEMBUNYI BRAY',
+  user     : 'TERSEMBUNYI BRAY',
+  password : 'TERSEMBUNYI BRAY',
+  database : 'TERSEMBUNYI BRAY',
 });
 
 db.connect((err) => {
   if (err) {
     console.error('❌ Gagal konek ke database:', err.message);
-    return;
+  } else {
+    console.log('✅ Terhubung ke database notes_123230230');
   }
-  console.log('✅ Terhubung ke database notes_123230230');
 });
 
 // ── Helper ──────────────────────────────────────────────────────────────────
@@ -38,7 +32,12 @@ const tanganiErrorDB = (res, err) => {
 
 // ── Routes ──────────────────────────────────────────────────────────────────
 
-// Health check
+// Root Route untuk Cloud Run Health Check
+app.get('/', (req, res) => {
+  res.send('Backend JoyRecords is running perfectly on Cloud Run!');
+});
+
+// Health check API
 app.get('/api/v1/health', (req, res) => {
   res.json({ success: true, message: 'JoyRecords API is running' });
 });
@@ -111,7 +110,8 @@ app.delete('/api/v1/jurnal/:id', (req, res) => {
   });
 });
 
-// ── Start Server ────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+// ── Start Server (Hanya ditulis satu kali) ──────────────────────────────────
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server berjalan di port ${PORT}`);
 });

@@ -1,6 +1,6 @@
-runtime: python312
-service: joy-123230230
-
+service: joyrecords-frontend
+runtime: nodejs20
+env: standard
 handlers:
   - url: /
     static_files: index.html
@@ -8,4 +8,4 @@ handlers:
 
   - url: /(.*)
     static_files: \1
-    upload: .*``
+    upload: (.*)
